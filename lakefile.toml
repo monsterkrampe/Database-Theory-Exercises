@@ -1,0 +1,6 @@
+name = "DatabaseTheory"
+version = "0.1.0"
+defaultTargets = ["DatabaseTheory"]
+
+[[lean_lib]]
+name = "DatabaseTheory"
