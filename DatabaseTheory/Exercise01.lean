@@ -107,3 +107,88 @@ def aux_table_for_12_2 := ((T_Films.project _ (.cons (.there (.there .here)) .ni
 -- 13. directors directing every actor
 #eval ((T_Films.project _ (.cons (.there .here) .nil)).diff ((((T_Films.project _ (.cons (.there .here) .nil)).naturalJoin (T_Films.project _ (.cons (.there (.there .here)) .nil))).diff (T_Films.project _ (.cons (.there .here) (.cons (.there (.there .here)) .nil)))).project _ (.cons .here .nil))).distinct
 
+
+-- Exercise 1.2
+
+theorem join_empty (t : Table s) : t.naturalJoin ([] : Table []) = [] := by unfold Table.naturalJoin; simp
+
+
+theorem row_join_empty' (r : Row s) : cast (by simp [TableSchema.dropColumns]) (r.naturalJoin (s2 := []) ()) = some r := by
+  unfold Row.naturalJoin
+  unfold Row.joinOn
+  simp [Row.dropColumns, Row.project]
+  sorry
+
+theorem join_empty' (t : Table s) : cast (by simp [TableSchema.dropColumns]) (t.naturalJoin ([()] : Table [])) = t := by
+  induction t with
+  | nil =>
+    unfold Table.naturalJoin
+    simp
+    sorry
+  | cons hd tl ih =>
+    unfold Table.naturalJoin at *
+    rw [List.flatMap_cons]
+    sorry
+
+
+
+
+theorem aux_filter_mem_self (l : List α) [DecidableEq α] : l.filter (fun e => e ∈ l) = l := by simp
+theorem aux_dropColumns_self (s : TableSchema) : s.dropColumns s = [] := by unfold TableSchema.dropColumns; simp
+theorem aux_dropColumns_self_more (s : TableSchema) : ∀ s', s.dropColumns (s' ++ s) = [] := by intro s'; unfold TableSchema.dropColumns; simp; intro _ mem _; exact mem
+
+/- theorem aux_subschema_dropColumns_self_more (s s : TableSchema) : ∀ c, Subschema.dropColumns s s = cast (by rw [aux_dropColumns_self_more, aux_dropColumns_self]) (Subschema.dropColumns s (c::s)) := by -/
+/-   induction s with -/
+/-   | nil => simp [Subschema.dropColumns] -/
+/-   | cons hd tl ih => -/
+/-     intro c -/
+/-     unfold Subschema.dropColumns -/
+/-     simp -/
+/-     sorry -/
+
+theorem aux_subschema_dropColumns_self (s : TableSchema) : ∀ s', cast (by rw [aux_dropColumns_self_more]) (Subschema.dropColumns s (s' ++ s)) = Subschema.nil := by
+  induction s with
+  | nil => simp [Subschema.dropColumns]
+  | cons hd tl ih =>
+    intro s'
+    specialize ih (s' ++ [hd])
+    unfold Subschema.dropColumns
+    simp
+    have : Subschema.dropColumns tl (s' ++ [hd] ++ tl) = cast (by rw [List.append_assoc, List.singleton_append]) (Subschema.dropColumns tl (s' ++ hd :: tl)) := by sorry
+    simp [this] at ih
+    /- simp only [this] at ih -/
+    sorry
+
+theorem aux_row_dropColumns_self (r : Row s) : r.dropColumns s = cast (by rw [aux_dropColumns_self]) () := by
+  unfold Row.dropColumns
+  unfold Row.project
+  sorry
+
+theorem row_self_joinOn (r : Row s) : r.joinOn r s = some (cast (by rw [aux_dropColumns_self, List.append_nil]) r) := by
+  unfold Row.joinOn
+  sorry
+
+theorem self_join (t : Table s) : ∀ r, r ∈ t.naturalJoin t ↔ (cast (by rw [aux_filter_mem_self, aux_dropColumns_self, List.append_nil]) r) ∈ t := by
+  intro r
+  unfold Table.naturalJoin
+  constructor
+  . intro h
+    rw [List.mem_flatMap] at h
+    rcases h with ⟨r', r'_mem, h⟩
+    rw [List.mem_filterMap] at h
+    rcases h with ⟨r'', r''_mem, h⟩
+    unfold Row.naturalJoin at h
+    unfold Row.joinOn at h
+    simp only at h
+    simp only [aux_filter_mem_self] at h
+    split at h
+    . injection h with h
+      have : r''.dropColumns (s.filter (fun c => c ∈ s)) = cast (by rw [aux_filter_mem_self, aux_dropColumns_self]) () := by sorry
+      rw [this] at h
+      /- have : r'.concat (cast (by rw [aux_filter_mem_self, aux_dropColumns_self]) ()) = r' := by sorry -/
+      unfold Row.concat at h
+      simp at h
+      sorry
+    . simp at h
+  . sorry
+
