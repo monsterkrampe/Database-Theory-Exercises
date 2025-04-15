@@ -1,4 +1,4 @@
-import DatabaseTheory.Basic
+import DatabaseTheory.RelationalAlgebra
 
 import DatabaseTheory.Exercise01
 

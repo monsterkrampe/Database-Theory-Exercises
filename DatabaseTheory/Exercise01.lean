@@ -1,4 +1,4 @@
-import DatabaseTheory.Basic
+import DatabaseTheory.RelationalAlgebra
 
 def S_Films : TableSchema := [
   { name := "Title", dbType := DBType.string },
