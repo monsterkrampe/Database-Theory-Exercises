@@ -1,0 +1,16 @@
+father(alice, bob).
+mother(alice, carla).
+mother(evan, carla).
+father(carla, david).
+
+Parent(?X, ?Y) :- father(?X, ?Y).
+Parent(?X, ?Y) :- mother(?X, ?Y).
+Ancestor(?X, ?Y) :- Parent(?X, ?Y).
+Ancestor(?X, ?Z) :- Parent(?X, ?Y), Ancestor(?Y, ?Z).
+SameGeneration(alice, alice).
+SameGeneration(bob, bob).
+SameGeneration(carla, carla).
+SameGeneration(david, david).
+SameGeneration(evan, evan).
+SameGeneration(?X, ?Y) :- Parent(?X, ?V), Parent(?Y, ?W), SameGeneration(?V, ?W).
+

@@ -1,0 +1,17 @@
+% Square
+e(a,b,x).
+e(b,c,y).
+e(c,d,z).
+e(d,a,y).
+
+Reachable(a,a).
+Reachable(b,b).
+Reachable(c,c).
+Reachable(d,d).
+
+Reachable(?X,?Y) :- e(?X,?Y,_).
+Reachable(?X,?Z) :- e(?X,?Y,?L), Reachable(?Y,?W), e(?W,?Z,?L).
+Ans(?X,?Y) :- Reachable(?X,?Y).
+
+@output Ans.
+

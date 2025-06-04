@@ -1,0 +1,26 @@
+% Square
+e(a,b,s).
+e(b,c,s).
+e(c,d,s).
+e(d,a,s).
+
+% Triangle
+e(g,h,t).
+e(h,i,t).
+e(i,g,t).
+
+Reachable(a,a).
+Reachable(b,b).
+Reachable(c,c).
+Reachable(d,d).
+Reachable(g,g).
+Reachable(h,h).
+Reachable(i,i).
+
+Reachable(?X,?Z) :- Reachable(?X,?Y),Reachable(?Y,?Z).
+Reachable(?X,?Z) :- e(?X,?Y,s),Reachable(?Y,?W),e(?W,?Z,t).
+Reachable(?X,?Z) :- e(?X,?Y,t),Reachable(?Y,?W),e(?W,?Z,s).
+Ans(?X,?Y) :- Reachable(?X,?Y).
+
+@output Ans.
+
