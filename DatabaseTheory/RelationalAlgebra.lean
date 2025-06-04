@@ -70,7 +70,7 @@ theorem TableSchema.has_col_isSome_of_mem (s : TableSchema) (col : SchemaCol) : 
     cases Decidable.em (hd = col) with
     | inl eq => simp [eq]
     | inr neq =>
-      simp only [neq, Bool.false_eq_true, ↓reduceDIte, Option.isSome_map']
+      simp only [neq, Bool.false_eq_true, ↓reduceDIte, Option.isSome_map]
       apply ih
       cases h with
       | inl h => rw [h] at neq; simp at neq
