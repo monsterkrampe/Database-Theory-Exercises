@@ -108,6 +108,10 @@ def aux_table_for_12_2 := ((T_Films.project _ (.cons (.there (.there .here)) .ni
 #eval ((T_Films.project _ (.cons (.there .here) .nil)).diff ((((T_Films.project _ (.cons (.there .here) .nil)).naturalJoin (T_Films.project _ (.cons (.there (.there .here)) .nil))).diff (T_Films.project _ (.cons (.there .here) (.cons (.there (.there .here)) .nil)))).project _ (.cons .here .nil))).distinct
 
 
+-- I played around below to show some supposedly "simple" result for relational algebra operations from the exercise but this turns out to be way harder than I imagined with the underlying formaliaztion that I picked. So in the end I abandoned these efforts.
+
+/-
+
 -- Exercise 1.2
 
 theorem join_empty (t : Table s) : t.naturalJoin ([] : Table []) = [] := by unfold Table.naturalJoin; simp
@@ -191,4 +195,6 @@ theorem self_join (t : Table s) : ∀ r, r ∈ t.naturalJoin t ↔ (cast (by rw 
       sorry
     . simp at h
   . sorry
+
+-/
 
